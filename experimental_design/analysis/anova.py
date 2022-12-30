@@ -132,7 +132,7 @@ class Anova:
             raise Exception("The bound must be 'upper', 'lower', or 'two-sided'. The given bound was {}.".format(bound))
 
 
-    def scheffe():
+    def scheffe(alpha: float):
         pass
 
     def tukey():
