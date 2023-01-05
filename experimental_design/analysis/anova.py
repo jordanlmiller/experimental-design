@@ -91,7 +91,7 @@ class Anova:
         self.anova_table = pd.DataFrame(anova_dict)
 
 
-    def contrast_pvalue(self, contrast: np.array, bound="two-sided",  equal_variance=True):
+    def contrast_pvalue(self, contrast: np.array, bound="two-sided",  equal_variance=True) -> float:
         """return the p-value associated with an arbitrary contrast"""
         #estimate of the standard deviation
         if equal_variance:
@@ -110,7 +110,7 @@ class Anova:
             raise Exception("The bound must be 'upper', 'lower', or 'two-sided'. The given bound was {}.".format(bound))
 
 
-    def contrast_confidence_bound(self, contrast: np.array, confidence: float, bound="two-sided",  equal_variance=True):
+    def contrast_confidence_bound(self, contrast: np.array, confidence: float, bound="two-sided",  equal_variance=True) -> tuple:
         """return the confidence interval for an arbitrary contrast"""
         if not (confidence >= 0. and confidence <= 1.):
             raise Exception("Confidence must be a float between 0 and 1. The given confidence was {}.".format(confidence))
@@ -150,10 +150,8 @@ class Anova:
         #plot all data points
         plt.scatter(self.xdata, self.ydata)
         for i, avg in enumerate(self.treatment_lvl_avg):
-            c = np.ones(self.v) * (1/self.v)
-            c[i] -= 1
-            yerror = self.contrast_confidence_bound(c, confidence)
-            plt.errorbar(self.treatment_lvls[i], avg, yerr=(yerror[1]-avg), color='y')
+            yerror = st.t.isf((1-confidence)/2, self.error_dof) * np.sqrt(self.msE / self.r[i])
+            plt.errorbar(self.treatment_lvls[i], avg, yerr=yerror, color='y')
         
         #format plot
         plt.xticks(ticks=self.treatment_lvls, labels=self.treatment_lvls)#, minor=False)
