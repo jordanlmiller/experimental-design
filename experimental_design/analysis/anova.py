@@ -132,8 +132,57 @@ class Anova:
             raise Exception("The bound must be 'upper', 'lower', or 'two-sided'. The given bound was {}.".format(bound))
 
 
-    def scheffe(alpha: float):
-        pass
+    def scheffe(self, alpha: float):
+        """Perform Scheffé's method for multiple comparisons
+        
+        Parameters
+        ----------
+        alpha : float
+            Probability of Type I error
+            
+        Returns
+        -------
+        dom_table
+            difference of means table
+            
+        """
+        #critical coefficient
+        ws = np.sqrt(self.v * st.f.isf(alpha, self.v, self.error_dof))
+        contrast_label_list = []
+        #generate the table of pairwise comparisons
+        for i in range(self.v):
+            for j in range(i+1, self.v):
+                contrast_label_list.append("{i} - {j}".format(i=i, j=j))
+                contrast = np.zeros(self.v)
+                contrast[i] = 1.
+                contrast[j] = -1.
+                contrast_bound = self.contrast_confidence_bound(contrast, )
+
+    def difference_of_means(self, alpha: float):
+        """Perform Scheffé's method for multiple comparisons
+        
+        Parameters
+        ----------
+        alpha : float
+            Probability of Type I error
+            
+        Returns
+        -------
+        dom_table
+            difference of means table
+            
+        """
+        #critical coefficient
+        ws = np.sqrt(self.v * st.f.isf(alpha, self.v, self.error_dof))
+        contrast_label_list = []
+        #generate the table of pairwise comparisons
+        for i in range(self.v):
+            for j in range(i+1, self.v):
+                contrast_label_list.append("{i} - {j}".format(i=i, j=j))
+                contrast = np.zeros(self.v)
+                contrast[i] = 1.
+                contrast[j] = -1.
+                contrast_bound = self.contrast_confidence_bound(contrast, )
 
     def tukey():
         pass
