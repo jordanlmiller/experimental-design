@@ -23,13 +23,11 @@ class Anova:
         y : string
             name of the column representing the dependent variable
             
-
-            
         """
-        self.x = x
-        self.y = y
-        self.xdata = df[self.x]
-        self.ydata = df[self.y]
+        self.__x = x
+        self.__y = y
+        self.__xdata = df[self.x]
+        self.__ydata = df[self.y]
 
         """check that the inputs are the correct type for anova"""
         #check that the input, df, is a pandas DataFrame
@@ -89,6 +87,22 @@ class Anova:
             "p-Value" : [st.f.sf(self.msT / self.msE, self.treatment_dof, self.error_dof), st.chi2.sf(self.msE, self.error_dof), ""]
         }
         self.anova_table = pd.DataFrame(anova_dict)
+
+    @property
+    def x(self):
+        return self.__x
+    
+    @property
+    def y(self):
+        return self.__y
+    
+    @property
+    def xdata(self):
+        return self.__xdata
+    
+    @property
+    def ydata(self):
+        return self.__ydata
 
 
     def contrast_pvalue(self, contrast: np.array, bound="two-sided",  equal_variance=True) -> float:
